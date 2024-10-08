@@ -4,7 +4,6 @@
 	"name": "quickstart",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/base:bullseye",
-	"postStartCommand": "code quickstart.md",
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {
 			"version": "latest",
@@ -24,6 +23,11 @@
 					"*.md": "vscode.markdown.preview.editor"
 				}		
 			}			
-  		}
+  		},
+		"codespaces": {
+				"openFiles": [
+						"quickstart.md"
+				]
+		}
 	}	
 }
