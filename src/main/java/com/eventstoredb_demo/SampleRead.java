@@ -33,37 +33,40 @@ public class SampleRead {
 
 
                 ReadStreamOptions options = ReadStreamOptions.get()
-                .forwards()
-                .fromStart()
-                .maxCount(10);
+                        .forwards()
+                        .fromStart()
+                        .maxCount(10);
 
                 //get events from stream
-                ReadResult result = client.readStream("SampleContent", options)
-                .get();
+                String eventStream = "SampleStream";
+                ReadResult result = client.readStream(eventStream, options)
+                        .get();
 
                 // iterate over list of events
                 for (ResolvedEvent resolvedEvent : result.getEvents()) {
-                RecordedEvent recordedEvent = resolvedEvent.getOriginalEvent();
-                
-                // extract event data
-                // Note the data will be base64 encoded strings
-                // enclosed in quotes
-                String data = (new ObjectMapper().writeValueAsString(recordedEvent.getEventData()));
-                
-                // remove the quotes
-                String dataNoQuotes =data.replace("\"", "");
-
-
-                //Decode BASE64 sting to byte array
-                byte[] decodedBytes = Base64.getUrlDecoder().decode(dataNoQuotes);
-
-                // convert decoded byteArray to String
-                String decodedUrl = new String(decodedBytes);
-
-                // print the string to console output
-                System.out.println(decodedUrl);
-                
+                        RecordedEvent recordedEvent = resolvedEvent.getOriginalEvent();
                         
+                        // extract event data
+                        // Note the data will be base64 encoded strings
+                        // enclosed in quotes
+                        String data = (new ObjectMapper().writeValueAsString(recordedEvent.getEventData()));
+                        
+                        // remove the quotes
+                        String dataNoQuotes =data.replace("\"", "");
+
+                        //Decode BASE64 sting to byte array
+                        byte[] decodedBytes = Base64.getUrlDecoder().decode(dataNoQuotes);
+
+                        // convert decoded byteArray to String
+                        String eventJson = new String(decodedBytes);
+
+                        // print the string to console output                
+                        System.out.println("************************");
+                        System.out.println("You have read an event!");
+                        System.out.println("Stream: " + recordedEvent.getStreamId());
+                        System.out.println("Event Type: " + recordedEvent.getEventType());
+                        System.out.println("Event Body: " + eventJson);
+                        System.out.println("************************");
                 
                 }
                 

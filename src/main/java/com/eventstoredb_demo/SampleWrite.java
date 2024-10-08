@@ -31,24 +31,17 @@ public class SampleWrite {
                
                 // Create an instance of the TestEvent class
                 // TestEvent is defined in the file TestEvent.java
-                TestEvent event = new TestEvent();
-               
-               
-                
-                //event.setId(UUID.randomUUID().toString());
-                event.setImportantData("I wrote my first event!");
-        
-               
-                // Build an event
-                EventData eventData = EventData
-                .builderAsJson(
-                UUID.randomUUID(),
-                "some-event",
-                new TestEvent(
+                TestEvent testEvent = new TestEvent(
                         "1",
                         "some value"
-                ))
-                .build();
+                );
+                
+                // Build the EventStoreDB event data structure
+                String eventType = "SampleEventType";
+                EventData eventData = EventData.builderAsJson(
+                        UUID.randomUUID(),
+                        eventType,
+                        testEvent).build();
                 
                 // Set stream options
                 // This is an advanced feature that can be used to 
@@ -63,10 +56,15 @@ public class SampleWrite {
                 // stream browser page on the webui for
                 // the eventstore instance to verify
                 // http://localhost:2113
-                client.appendToStream("SampleContent",options,eventData).get();
+                
+                String eventStream = "SampleStream";
+                client.appendToStream(eventStream, options, eventData).get();
 
                 System.out.println("************************");
-                System.out.println("Congratulations, you have written an event, \nplease visit the webui of \nthe eventstore insance you have connected \nto example: http://localhost:2113");
+                System.out.println("🎉 Congratulations, you have written an event!");
+                System.out.println("Stream: " + eventStream);
+                System.out.println("Event Type: " + eventType);
+                System.out.println("Event Body: {\"id\":\"1\",\"importantData\":\"some value\"}");
                 System.out.println("************************");
         }
     
