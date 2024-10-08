@@ -17,6 +17,12 @@
 			"installMaven": "true"
 		}
 	},
+	"portsAttributes": {
+		"2113": {
+			"label": "EventStoreDB Admin UI",
+			"onAutoForward": "openBrowser"
+		}
+	},
 	"customizations": {
 		"vscode": {
 			"settings": {
