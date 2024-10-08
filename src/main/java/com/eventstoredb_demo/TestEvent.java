@@ -7,10 +7,10 @@ public class TestEvent {
     private String id;
     private String importantData;
 
-    public TestEvent(){
+    public TestEvent() {
     }
 
-    public TestEvent(String id, String importantData){
+    public TestEvent(String id, String importantData) {
         this.id = id;
         this.importantData = importantData;
     }
