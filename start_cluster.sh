@@ -50,5 +50,10 @@ then
 fi
 
 # Print URL to EventStoreDB Admin UI
-echo -e "🚀 \e[32mEventStoreDB Server has started\e[0m 🚀" 
-echo -e "Browse the EventStoreDB Admin UI at:\e[0m \e[34m$ESDB_URL\e[0m"
+echo ""
+echo ""
+echo -e "🚀 \e[32mEventStoreDB Server has started!!\e[0m 🚀" 
+echo ""
+echo -e "Browse the EventStoreDB Admin UI at 👉 \e[0m \e[34m$ESDB_URL\e[0m"
+echo ""
+echo ""
