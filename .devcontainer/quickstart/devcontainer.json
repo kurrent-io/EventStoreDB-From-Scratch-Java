@@ -20,7 +20,11 @@
 	"portsAttributes": {
 		"2113": {
 			"label": "EventStoreDB Admin UI",
-			"onAutoForward": "openBrowser"
+			"onAutoForward": "notify"
+		},
+		"1113": {
+			"label": "EventStoreDB API",
+			"onAutoForward": "silent"
 		}
 	},
 	"customizations": {
