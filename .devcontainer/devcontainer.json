@@ -11,6 +11,7 @@
 			"enableNonRootDocker": "true",
 			"moby": "true"
 		},
+		"ghcr.io/devcontainers/features/github-cli:1": {}, // for gh command to extract the URL of this instance
 		"ghcr.io/devcontainers/features/java:1": {
 			"version": "17",
 			"installMaven": "true"

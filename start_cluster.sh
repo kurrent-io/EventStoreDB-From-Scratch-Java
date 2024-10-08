@@ -45,4 +45,14 @@ else
 	  --enable-external-tcp --enable-atom-pub-over-http
 fi
 
+# Grab URL to EventStoreDB Admin UI
+ESDB_URL=http://localhost:2113
+if command -v gh &> /dev/null && [ "$CODESPACES" == "true" ]
+then
+       # Grab URL from github codespaces if script is ran from there
+       ESDB_URL=$(gh codespace ports --repo $(gh codespace view --json repository -q '.repository') --json browseUrl,sourcePort --jq '.[] | select(.sourcePort == 2113) | .browseUrl')
+fi
 
+# Print URL to EventStoreDB Admin UI
+echo -e "🚀 \e[32mEventStoreDB Server has started\e[0m 🚀" 
+echo -e "Browse the EventStoreDB Admin UI at:\e[0m \e[34m$ESDB_URL\e[0m"
