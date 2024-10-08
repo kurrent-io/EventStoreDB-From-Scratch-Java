@@ -4,6 +4,7 @@
 	"name": "quickstart",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/base:bullseye",
+	"postCreateCommand": "sudo cp .devcontainer/quickstart/welcome.txt /usr/local/etc/vscode-dev-containers/first-run-notice.txt",
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {
 			"version": "latest",
@@ -19,15 +20,8 @@
 	"customizations": {
 		"vscode": {
 			"settings": {
-				"workbench.editorAssociations": {   
-					"*.md": "vscode.markdown.preview.editor"
-				}		
+				"workbench.startupEditor": "none"
 			}			
-  		},
-		"codespaces": {
-				"openFiles": [
-						"quickstart.md"
-				]
-		}
+  		}
 	}	
 }
