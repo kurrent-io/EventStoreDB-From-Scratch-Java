@@ -18,12 +18,10 @@
 		}
 	},
 	"customizations": {
-		"vscode": {
-			"settings": {
-				"workbench.startupEditor": "none", // This prevents the default welcome page
-				"files.hotExit": "onExitAndWindowClose",
-				"workbench.editor.openEditors": ["quickstart.md"]
-			}
-		}
+		"codespaces": {
+			"openFiles": [
+				"quickstart.md"
+			]
+  }
 	}
 }
