@@ -4,7 +4,6 @@
 	"name": "from-scratch",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/base:bullseye",
-
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {
 			"version": "latest",
@@ -16,5 +15,25 @@
 			"version": "17", // Hardcoded to 17 due to bug: https://github.com/devcontainers/features/issues/1134
 			"installMaven": "true"
 		}
-	}
+	},
+	"portsAttributes": {
+		"2113": {
+			"label": "EventStoreDB Admin UI",
+			"onAutoForward": "notify"
+		},
+		"1113": {
+			"label": "EventStoreDB API",
+			"onAutoForward": "silent"
+		}
+	},
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"extensions.ignoreRecommendations": true,
+				"telemetry.enableTelemetry": false,
+				"telemetry.telemetryLevel": "off",				
+				"redhat.telemetry.enabled": false		
+			}
+		}
+	}	
 }
