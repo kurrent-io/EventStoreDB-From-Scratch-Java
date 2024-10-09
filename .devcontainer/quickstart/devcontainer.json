@@ -31,7 +31,7 @@
 		"vscode": {
 			"settings": {
 				"extensions.ignoreRecommendations": true,
-				"telemetry.enableTelemetry": true,
+				"telemetry.enableTelemetry": false,
 				"telemetry.telemetryLevel": "off"				
 			}
 		},
