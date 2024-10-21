@@ -65,7 +65,7 @@ fi
 
 # Grab URL to EventStoreDB Admin UI
 ESDB_URL=http://localhost:2113
-if command -v gh &> /dev/null && [ "$CODESPACES" == "true" ]
+if [ "$CODESPACES" == "true" ]
 then
        # Grab URL from github codespaces if script is ran from there
        ESDB_URL=https://"$CODESPACE_NAME"-2113.$GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN
