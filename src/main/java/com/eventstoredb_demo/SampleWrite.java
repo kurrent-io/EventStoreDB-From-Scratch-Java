@@ -25,7 +25,7 @@ public class SampleWrite {
                 // details at web page below
                 // https://developers.eventstore.com/getting-started.html#installation
                
-                // configure the settings
+                // configure the settings to connect to EventStoreDB locally without TLS
                 EventStoreDBClientSettings settings = EventStoreDBConnectionString.
                         parseOrThrow("esdb://localhost:2113?tls=false");
                
@@ -39,14 +39,13 @@ public class SampleWrite {
                 /////////////////////////////////////////////////////////////
 
                 // Build the EventStoreDB event data structure
-                String eventType = "SampleEventType";
-                byte[] eventBody = "{\"id\":\"1\", \"importantData\":\"some value\"}"
+                String eventType = "SampleEventType";                                  // Define the name of the event type for the new event
+                byte[] eventBody = "{\"id\":\"1\", \"importantData\":\"some value\"}"  // Define the body of the event in a UTF8 encoded byte array
                         .getBytes(StandardCharsets.UTF_8);
                 
-                EventData eventData = EventData.builderAsJson(
-                        eventType,
-                        eventBody
-                ).build();
+                EventData eventData = 
+                        EventData.builderAsJson(eventType, eventBody)                  // Create the new event object with the type and body
+                                .build();
 
                 ///////////////////////////////////////////////////
                 //

@@ -27,9 +27,9 @@ public class SampleRead {
                 // details at web page below
                 // https://developers.eventstore.com/getting-started.html#installation
                 
-                // configure the settings
+                // configure the settings to connect to EventStoreDB locally without TLS
                 EventStoreDBClientSettings settings = EventStoreDBConnectionString.
-                parseOrThrow("esdb://localhost:2113?tls=false");
+                        parseOrThrow("esdb://localhost:2113?tls=false");
                
                 // apply the settings and create an instance of the client
                 EventStoreDBClient client = EventStoreDBClient.create(settings); 
@@ -40,10 +40,11 @@ public class SampleRead {
                 //
                 ///////////////////////////////////////////
                 
-                ReadStreamOptions options = ReadStreamOptions.get()  // define the read option for client to read events
-                        .forwards()                                  // client should read events forward in time
-                        .fromStart()                                 // client should read from the start of stream
-                        .maxCount(10);                               // client should read at most 10 events
+                ReadStreamOptions options =       
+                        ReadStreamOptions.get()  // Create a read option for client to read events
+                                .forwards()      // Client should read events forward in time
+                                .fromStart()     // Client should read from the start of stream
+                                .maxCount(10);   // Client should read at most 10 events
 
                 // get events from stream
                 String eventStream = "SampleStream";
