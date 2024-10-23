@@ -13,17 +13,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class SampleRead {
         public static void main(String[] args) throws Exception {
 
+                ////////////////////////////////////////////////////////
+                //
+                // Step 1. Create client and connect it to EventStoreDB
+                //
+                ////////////////////////////////////////////////////////
 
-               //////////////////////////////////////////////
-               // Create a connection 
-               // The assumption is that an unsecured instance of
-               // eventstoredb is running locally
-               // If running in codespaces run the start_server script
-               // If running on your own machine run the docker container
-               // details at web page below
-               // https://developers.eventstore.com/getting-started.html#installation
-               /////////////////////////////////////////////
-               
+                // Create a connection 
+                // The assumption is that an unsecured instance of
+                // eventstoredb is running locally
+                // If running in codespaces run the start_server script
+                // If running on your own machine run the docker container
+                // details at web page below
+                // https://developers.eventstore.com/getting-started.html#installation
+                
                 // configure the settings
                 EventStoreDBClientSettings settings = EventStoreDBConnectionString.
                 parseOrThrow("esdb://localhost:2113?tls=false");
@@ -31,16 +34,26 @@ public class SampleRead {
                 // apply the settings and create an instance of the client
                 EventStoreDBClient client = EventStoreDBClient.create(settings); 
 
+                ///////////////////////////////////////////
+                //
+                // Step 2. Read all events from the stream
+                //
+                ///////////////////////////////////////////
+                
+                ReadStreamOptions options = ReadStreamOptions.get()  // define the read option for client to read events
+                        .forwards()                                  // client should read events forward in time
+                        .fromStart()                                 // client should read from the start of stream
+                        .maxCount(10);                               // client should read at most 10 events
 
-                ReadStreamOptions options = ReadStreamOptions.get()
-                        .forwards()
-                        .fromStart()
-                        .maxCount(10);
-
-                //get events from stream
+                // get events from stream
                 String eventStream = "SampleStream";
                 ReadResult result = client.readStream(eventStream, options).get();
 
+                ///////////////////////////////////////
+                //
+                // Step 3. Print each event to console
+                //
+                ///////////////////////////////////////
 
                 for (ResolvedEvent resolvedEvent : result.getEvents()) {                                 // For each event in stream
                         RecordedEvent recordedEvent = resolvedEvent.getOriginalEvent();                  // Get the original event (can ignore for now)
@@ -53,10 +66,5 @@ public class SampleRead {
                                                                        StandardCharsets.UTF_8));         // UTF8 is used to convert byte array to string
                         System.out.println("************************");
                 }
-                
-                
-
         }
-    
-   
-    }
+}

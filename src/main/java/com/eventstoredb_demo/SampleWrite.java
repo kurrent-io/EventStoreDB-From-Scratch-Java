@@ -11,23 +11,33 @@ import com.eventstore.dbclient.ExpectedRevision;
 public class SampleWrite {
         public static void main(String[] args) throws Exception {
 
-
-               //////////////////////////////////////////////
-               // Create a connection 
-               // The assumption is that an unsecured instance of
-               // eventstoredb is running locally
-               // If running in codespaces run the start_server script
-               // If running on your own machine run the docker container
-               // details at web page below
-               // https://developers.eventstore.com/getting-started.html#installation
-               /////////////////////////////////////////////
+                ////////////////////////////////////////////////////////
+                //
+                // Step 1. Create client and connect it to EventStoreDB
+                //
+                ////////////////////////////////////////////////////////
+               
+                // Create a connection 
+                // The assumption is that an unsecured instance of
+                // eventstoredb is running locally
+                // If running in codespaces run the start_server script
+                // If running on your own machine run the docker container
+                // details at web page below
+                // https://developers.eventstore.com/getting-started.html#installation
                
                 // configure the settings
                 EventStoreDBClientSettings settings = EventStoreDBConnectionString.
-                parseOrThrow("esdb://localhost:2113?tls=false");
+                        parseOrThrow("esdb://localhost:2113?tls=false");
                
                 // apply the settings and create an instance of the client
                 EventStoreDBClient client = EventStoreDBClient.create(settings); 
+
+                /////////////////////////////////////////////////////////////
+                //
+                // Step 2. Create new event object with a type and data body
+                //
+                /////////////////////////////////////////////////////////////
+
                 // Build the EventStoreDB event data structure
                 String eventType = "SampleEventType";
                 byte[] eventBody = "{\"id\":\"1\", \"importantData\":\"some value\"}"
@@ -37,6 +47,12 @@ public class SampleWrite {
                         eventType,
                         eventBody
                 ).build();
+
+                ///////////////////////////////////////////////////
+                //
+                // Step 3. Append the event object into the stream
+                //
+                ///////////////////////////////////////////////////
 
                 // Set stream options
                 // This is an advanced feature that can be used to 
@@ -55,6 +71,12 @@ public class SampleWrite {
                 String eventStream = "SampleStream";
                 client.appendToStream(eventStream, options, eventData).get();
 
+                ///////////////////////////////////////////////
+                //
+                // Step 4. Print the appended event to console
+                //
+                ///////////////////////////////////////////////
+
                 System.out.println("************************");
                 System.out.println("🎉 Congratulations, you have written an event!");
                 System.out.println("Stream: " + eventStream);
@@ -62,6 +84,4 @@ public class SampleWrite {
                 System.out.println("Event Body: {\"id\":\"1\",\"importantData\":\"some value\"}");
                 System.out.println("************************");
         }
-    
-   
     }
