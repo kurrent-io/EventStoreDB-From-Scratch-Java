@@ -1,6 +1,6 @@
 package com.eventstoredb_demo;
 
-import java.util.UUID;
+import java.nio.charset.StandardCharsets;
 import com.eventstore.dbclient.AppendToStreamOptions;
 import com.eventstore.dbclient.EventData;
 import com.eventstore.dbclient.EventStoreDBClient;
@@ -28,21 +28,16 @@ public class SampleWrite {
                
                 // apply the settings and create an instance of the client
                 EventStoreDBClient client = EventStoreDBClient.create(settings); 
-               
-                // Create an instance of the TestEvent class
-                // TestEvent is defined in the file TestEvent.java
-                TestEvent testEvent = new TestEvent(
-                        "1",
-                        "some value"
-                );
-                
                 // Build the EventStoreDB event data structure
                 String eventType = "SampleEventType";
-                EventData eventData = EventData.builderAsJson(
-                        UUID.randomUUID(),
-                        eventType,
-                        testEvent).build();
+                byte[] eventBody = "{\"id\":\"1\", \"importantData\":\"some value\"}"
+                        .getBytes(StandardCharsets.UTF_8);
                 
+                EventData eventData = EventData.builderAsJson(
+                        eventType,
+                        eventBody
+                ).build();
+
                 // Set stream options
                 // This is an advanced feature that can be used to 
                 // gurantee either the presence or lack of the stream and other options

@@ -1,6 +1,6 @@
 package com.eventstoredb_demo;
 
-import java.util.Base64;
+import java.nio.charset.StandardCharsets;
 import com.eventstore.dbclient.EventStoreDBClient;
 import com.eventstore.dbclient.EventStoreDBClientSettings;
 import com.eventstore.dbclient.EventStoreDBConnectionString;
@@ -39,35 +39,19 @@ public class SampleRead {
 
                 //get events from stream
                 String eventStream = "SampleStream";
-                ReadResult result = client.readStream(eventStream, options)
-                        .get();
+                ReadResult result = client.readStream(eventStream, options).get();
 
-                // iterate over list of events
-                for (ResolvedEvent resolvedEvent : result.getEvents()) {
-                        RecordedEvent recordedEvent = resolvedEvent.getOriginalEvent();
-                        
-                        // extract event data
-                        // Note the data will be base64 encoded strings
-                        // enclosed in quotes
-                        String data = (new ObjectMapper().writeValueAsString(recordedEvent.getEventData()));
-                        
-                        // remove the quotes
-                        String dataNoQuotes =data.replace("\"", "");
 
-                        //Decode BASE64 sting to byte array
-                        byte[] decodedBytes = Base64.getUrlDecoder().decode(dataNoQuotes);
-
-                        // convert decoded byteArray to String
-                        String eventJson = new String(decodedBytes);
-
-                        // print the string to console output                
+                for (ResolvedEvent resolvedEvent : result.getEvents()) {                                 // For each event in stream
+                        RecordedEvent recordedEvent = resolvedEvent.getOriginalEvent();                  // Get the original event (can ignore for now)
+                                                                                                         //
+                        System.out.println("************************");                                  //
+                        System.out.println("You have read an event!");                                   //
+                        System.out.println("Stream: " + recordedEvent.getStreamId());                    // Print the stream name of the event
+                        System.out.println("Event Type: " + recordedEvent.getEventType());               // Print the type of the event 
+                        System.out.println("Event Body: " + new String(recordedEvent.getEventData(),     // Print the body of the event after converting it from a byte array
+                                                                       StandardCharsets.UTF_8));         // UTF8 is used to convert byte array to string
                         System.out.println("************************");
-                        System.out.println("You have read an event!");
-                        System.out.println("Stream: " + recordedEvent.getStreamId());
-                        System.out.println("Event Type: " + recordedEvent.getEventType());
-                        System.out.println("Event Body: " + eventJson);
-                        System.out.println("************************");
-                
                 }
                 
                 
