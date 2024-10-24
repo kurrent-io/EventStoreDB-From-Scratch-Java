@@ -14,12 +14,6 @@
       <artifactId>db-client-java</artifactId>
       <version>5.3.2</version>
     </dependency>
-     <dependency>
-      <groupId>com.eventstore</groupId>
-      <artifactId>db-client-java</artifactId>
-      <version>5.3.2</version>
-    </dependency>
-
 
     <dependency>
     <groupId>com.fasterxml.jackson.core</groupId>
@@ -38,6 +32,15 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+
+<!-- SLF4J NOP binding added to suppress logging in this tutorial.
+     Remove or replace with another SLF4J binding (e.g. Logback) to enable logging. -->
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-nop</artifactId>
+    <version>2.0.9</version>
+</dependency>
+
   </dependencies>
 <build>
   <plugins>
