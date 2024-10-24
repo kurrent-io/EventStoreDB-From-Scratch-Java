@@ -1,6 +1,6 @@
 package com.eventstoredb_demo;
 
-import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import com.eventstore.dbclient.EventStoreDBClient;
 import com.eventstore.dbclient.EventStoreDBClientSettings;
 import com.eventstore.dbclient.EventStoreDBConnectionString;
@@ -13,59 +13,63 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class SampleRead {
         public static void main(String[] args) throws Exception {
 
-                ////////////////////////////////////////////////////////
-                //
-                // Step 1. Create client and connect it to EventStoreDB
-                //
-                ////////////////////////////////////////////////////////
 
-                // Create a connection 
-                // The assumption is that an unsecured instance of
-                // eventstoredb is running locally
-                // If running in codespaces run the start_server script
-                // If running on your own machine run the docker container
-                // details at web page below
-                // https://developers.eventstore.com/getting-started.html#installation
-                
-                // configure the settings to connect to EventStoreDB locally without TLS
+               //////////////////////////////////////////////
+               // Create a connection 
+               // The assumption is that an unsecured instance of
+               // eventstoredb is running locally
+               // If running in codespaces run the start_server script
+               // If running on your own machine run the docker container
+               // details at web page below
+               // https://developers.eventstore.com/getting-started.html#installation
+               /////////////////////////////////////////////
+               
+                // configure the settings
                 EventStoreDBClientSettings settings = EventStoreDBConnectionString.
-                        parseOrThrow("esdb://localhost:2113?tls=false");
+                parseOrThrow("esdb://localhost:2113?tls=false");
                
                 // apply the settings and create an instance of the client
                 EventStoreDBClient client = EventStoreDBClient.create(settings); 
 
-                ///////////////////////////////////////////
-                //
-                // Step 2. Read all events from the stream
-                //
-                ///////////////////////////////////////////
+
+                ReadStreamOptions options = ReadStreamOptions.get()
+                .forwards()
+                .fromStart()
+                .maxCount(10);
+
+                //get events from stream
+                ReadResult result = client.readStream("SampleContent", options)
+                .get();
+
+                // iterate over list of events
+                for (ResolvedEvent resolvedEvent : result.getEvents()) {
+                RecordedEvent recordedEvent = resolvedEvent.getOriginalEvent();
                 
-                ReadStreamOptions options =       
-                        ReadStreamOptions.get()  // Create a read option for client to read events
-                                .forwards()      // Client should read events forward in time
-                                .fromStart()     // Client should read from the start of stream
-                                .maxCount(10);   // Client should read at most 10 events
+                // extract event data
+                // Note the data will be base64 encoded strings
+                // enclosed in quotes
+                String data = (new ObjectMapper().writeValueAsString(recordedEvent.getEventData()));
+                
+                // remove the quotes
+                String dataNoQuotes =data.replace("\"", "");
 
-                // get events from stream
-                String eventStream = "SampleStream";
-                ReadResult result = client.readStream(eventStream, options).get();
 
-                ///////////////////////////////////////
-                //
-                // Step 3. Print each event to console
-                //
-                ///////////////////////////////////////
+                //Decode BASE64 sting to byte array
+                byte[] decodedBytes = Base64.getUrlDecoder().decode(dataNoQuotes);
 
-                for (ResolvedEvent resolvedEvent : result.getEvents()) {                                 // For each event in stream
-                        RecordedEvent recordedEvent = resolvedEvent.getOriginalEvent();                  // Get the original event (can ignore for now)
-                                                                                                         //
-                        System.out.println("************************");                                  //
-                        System.out.println("You have read an event!");                                   //
-                        System.out.println("Stream: " + recordedEvent.getStreamId());                    // Print the stream name of the event
-                        System.out.println("Event Type: " + recordedEvent.getEventType());               // Print the type of the event 
-                        System.out.println("Event Body: " + new String(recordedEvent.getEventData(),     // Print the body of the event after converting it from a byte array
-                                                                       StandardCharsets.UTF_8));         // UTF8 is used to convert byte array to string
-                        System.out.println("************************");
+                // convert decoded byteArray to String
+                String decodedUrl = new String(decodedBytes);
+
+                // print the string to console output
+                System.out.println(decodedUrl);
+                
+                        
+                
                 }
+                
+                
+
         }
-}
+    
+   
+    }

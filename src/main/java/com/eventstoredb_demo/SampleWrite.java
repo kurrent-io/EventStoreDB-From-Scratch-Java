@@ -1,6 +1,6 @@
 package com.eventstoredb_demo;
 
-import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 import com.eventstore.dbclient.AppendToStreamOptions;
 import com.eventstore.dbclient.EventData;
 import com.eventstore.dbclient.EventStoreDBClient;
@@ -11,48 +11,45 @@ import com.eventstore.dbclient.ExpectedRevision;
 public class SampleWrite {
         public static void main(String[] args) throws Exception {
 
-                ////////////////////////////////////////////////////////
-                //
-                // Step 1. Create client and connect it to EventStoreDB
-                //
-                ////////////////////////////////////////////////////////
+
+               //////////////////////////////////////////////
+               // Create a connection 
+               // The assumption is that an unsecured instance of
+               // eventstoredb is running locally
+               // If running in codespaces run the start_server script
+               // If running on your own machine run the docker container
+               // details at web page below
+               // https://developers.eventstore.com/getting-started.html#installation
+               /////////////////////////////////////////////
                
-                // Create a connection 
-                // The assumption is that an unsecured instance of
-                // eventstoredb is running locally
-                // If running in codespaces run the start_server script
-                // If running on your own machine run the docker container
-                // details at web page below
-                // https://developers.eventstore.com/getting-started.html#installation
-               
-                // configure the settings to connect to EventStoreDB locally without TLS
+                // configure the settings
                 EventStoreDBClientSettings settings = EventStoreDBConnectionString.
-                        parseOrThrow("esdb://localhost:2113?tls=false");
+                parseOrThrow("esdb://localhost:2113?tls=false");
                
                 // apply the settings and create an instance of the client
                 EventStoreDBClient client = EventStoreDBClient.create(settings); 
-
-                /////////////////////////////////////////////////////////////
-                //
-                // Step 2. Create new event object with a type and data body
-                //
-                /////////////////////////////////////////////////////////////
-
-                // Build the EventStoreDB event data structure
-                String eventType = "SampleEventType";                                  // Define the name of the event type for the new event
-                byte[] eventBody = "{\"id\":\"1\", \"importantData\":\"some value\"}"  // Define the body of the event in a UTF8 encoded byte array
-                        .getBytes(StandardCharsets.UTF_8);
+               
+                // Create an instance of the TestEvent class
+                // TestEvent is defined in the file TestEvent.java
+                TestEvent event = new TestEvent();
+               
+               
                 
-                EventData eventData = 
-                        EventData.builderAsJson(eventType, eventBody)                  // Create the new event object with the type and body
-                                .build();
-
-                ///////////////////////////////////////////////////
-                //
-                // Step 3. Append the event object into the stream
-                //
-                ///////////////////////////////////////////////////
-
+                //event.setId(UUID.randomUUID().toString());
+                event.setImportantData("I wrote my first event!");
+        
+               
+                // Build an event
+                EventData eventData = EventData
+                .builderAsJson(
+                UUID.randomUUID(),
+                "some-event",
+                new TestEvent(
+                        "1",
+                        "some value"
+                ))
+                .build();
+                
                 // Set stream options
                 // This is an advanced feature that can be used to 
                 // gurantee either the presence or lack of the stream and other options
@@ -66,21 +63,12 @@ public class SampleWrite {
                 // stream browser page on the webui for
                 // the eventstore instance to verify
                 // http://localhost:2113
-                
-                String eventStream = "SampleStream";
-                client.appendToStream(eventStream, options, eventData).get();
-
-                ///////////////////////////////////////////////
-                //
-                // Step 4. Print the appended event to console
-                //
-                ///////////////////////////////////////////////
+                client.appendToStream("SampleContent",options,eventData).get();
 
                 System.out.println("************************");
-                System.out.println("🎉 Congratulations, you have written an event!");
-                System.out.println("Stream: " + eventStream);
-                System.out.println("Event Type: " + eventType);
-                System.out.println("Event Body: {\"id\":\"1\",\"importantData\":\"some value\"}");
+                System.out.println("Congratulations, you have written an event, \nplease visit the webui of \nthe eventstore insance you have connected \nto example: http://localhost:2113");
                 System.out.println("************************");
         }
+    
+   
     }
