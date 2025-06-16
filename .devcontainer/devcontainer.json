@@ -20,8 +20,31 @@
 				"extensions.ignoreRecommendations": true,
 				"telemetry.enableTelemetry": false,
 				"telemetry.telemetryLevel": "off",				
-				"redhat.telemetry.enabled": false		
-			}
+				"redhat.telemetry.enabled": false
+
+			},
+            "extensions": ["vscjava.vscode-java-pack"]
 		}
-	}	
+	}
+ 
 }
+
+// {
+//   "extensions": [
+//     "vscjava.vscode-java-pack"
+//   ]
+// }
+
+// {
+//   "name": "Java Development",
+//   "build": {
+//     "dockerfile": "Dockerfile",
+//     "context": ".."
+//   },
+//   "extensions": [
+//     "vscjava.vscode-java-pack"
+//   ],
+//   "forwardPorts": [],
+//   "postCreateCommand": "",
+//   "remoteUser": "vscode"
+// }
